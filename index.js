@@ -2,15 +2,10 @@ var express = require('express')
 var app = express()
 var nunjucks = require('nunjucks')
 
-var MegaSena = require('./src/megasena')
-
 const PATHS = {
   templates: 'views',
   statics: 'static'
 }
-
-// arquivos estáticos
-app.use(express.static(PATHS.statics))
 
 // templates
 nunjucks.configure(PATHS.templates, {
@@ -18,17 +13,19 @@ nunjucks.configure(PATHS.templates, {
   express: app
 })
 
+// arquivos estáticos
+app.use(express.static(PATHS.statics))
+
+// API
+app.use('/api', require('./src/routes'))
+
+// views
 app.get('/', (req, res) => {
-  res.render('./index.html', {
+  res.render('./index.njk', {
       title: 'Mega-Sena'
   })
 })
 
-app.get('/jogos/:games', (req, res) => {
-  let games = req.params.games
-  const mg = new MegaSena(games)
-  res.send(mg.gerarJogo())
-})
 
 const port = 6060
 app.listen(port, () => { console.log(`Running on ${port}`) })

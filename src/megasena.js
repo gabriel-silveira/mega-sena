@@ -1,7 +1,8 @@
 
 class MegaSena {
-  constructor(jogos) {
-    this.jogos = jogos
+  constructor(qtd_numeros, qtd_apostas) {
+    this.qtd_numeros = qtd_numeros
+    this.qtd_apostas = qtd_apostas
   }
 
   static home() {
@@ -11,14 +12,24 @@ class MegaSena {
   randomNumber() {
     return Math.floor(Math.random() * (61 - 1) + 1)
   }
+
+  gerarJogos() {
+    let jogos = []
+    for(let j = 1; j <= this.qtd_apostas; j++)
+      jogos.push(this.gerarJogo())
+    return jogos
+  }
   
-  gerarJogo(max=6) {
-    var jogo = []
-    while(jogo.length <= max) {
+  gerarJogo() {
+    
+    let jogo = []
+
+    while(jogo.length < this.qtd_numeros) {
       let num = this.randomNumber()
-      if(!jogo.includes(num)) jogo.push(num)
+      if(!jogo.includes(num)) jogo.push(("0"+num).slice(-2))
     }
-    return jogo
+
+    return jogo.sort()
   }
 }
 
